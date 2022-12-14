@@ -5,7 +5,7 @@ import { MedicalFacade } from 'src/Facades/medical.facade';
 
 import { Web3BaseRequest } from 'src/Models/web3BaseRequest';
 import { GetAllowedPatientsRequest } from 'src/Models/getAllowedPatientsRequest';
-import { AddMedicalRecordRequest } from 'src/interfaces/requests/addMedicalRecordRequest.interface';
+import { AddMedicalRecordRequest } from 'src/Models/addMedicalRecordRequest';
 
 import { MedicalRecord, Patient } from 'src/types';
 
@@ -31,9 +31,10 @@ export class MedicalController {
   }
 
   @Post('add-medical-records-on-patients-records')
+  @HttpCode(201)
   addMedicalOnPatientsRecords(
     @Body() addMedicalRecordRequest: AddMedicalRecordRequest,
-  ): string {
+  ): any {
     return this.medicalFacade.addMedicalRecords(addMedicalRecordRequest);
   }
 }

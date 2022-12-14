@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { MedicalService } from 'src/Services/medical.service';
 
 import { Web3BaseRequest } from 'src/Models/web3BaseRequest';
-import { AddMedicalRecordRequest } from 'src/interfaces/requests/addMedicalRecordRequest.interface';
+import { AddMedicalRecordRequest } from 'src/Models/addMedicalRecordRequest';
 import { GetAllowedPatientsRequest } from 'src/Models/getAllowedPatientsRequest';
 
 import { MedicalRecord, Patient } from 'src/types';
@@ -40,15 +40,17 @@ export class MedicalFacade {
     web3BaseRequest: Web3BaseRequest,
   ): Promise<MedicalRecord[]> {
     const records = await this.medicalService.getRecords(web3BaseRequest);
+
+    console.log(records);
     const parsedRecords = records.map(this.convertMedicalRecords);
 
     return parsedRecords;
   }
 
-  public addMedicalRecords(
+  public async addMedicalRecords(
     addMedicalRecordRequest: AddMedicalRecordRequest,
-  ): string {
-    return 'adicionado...';
+  ): Promise<any> {
+    return await this.medicalService.addRecord(addMedicalRecordRequest);
   }
 
   private convertMedicalRecords(stringfiedRecord: string): MedicalRecord {
@@ -65,7 +67,7 @@ export class MedicalFacade {
 
     return {
       Nome:
-        (await this.patientsService.getPatientsName(web3Resquest)) ??
+        await this.patientsService.getPatientsName(web3Resquest) ||
         'Sem Nome',
       Carteira: doctorWallet,
     };

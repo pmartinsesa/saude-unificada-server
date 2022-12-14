@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { Web3BaseRequest } from 'src/Models/web3BaseRequest';
-import { AddMedicalRecordRequest } from 'src/interfaces/requests/addMedicalRecordRequest.interface';
+import { AddMedicalRecordRequest } from 'src/Models/addMedicalRecordRequest';
 import { GetAllowedPatientsRequest } from 'src/Models/getAllowedPatientsRequest';
 
 import { Web3Service } from './web3.service';
@@ -46,9 +46,9 @@ export class MedicalService {
       .addMedicalRecord(
         addRecordRequest.patientsWallet,
         addRecordRequest.doctorWallet,
-        addRecordRequest.record,
+        JSON.stringify(addRecordRequest.record),
       )
-      .send({ from: addRecordRequest.patientsWallet, gas: 3000000 });
+      .send({ from: addRecordRequest.patientsWallet, gas: 3000000 } );
 
     return response;
   }
