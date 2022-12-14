@@ -4,27 +4,43 @@ import { MedicalService } from 'src/Services/medical.service';
 
 import { Web3BaseRequest } from 'src/Models/web3BaseRequest';
 import { AddMedicalRecordRequest } from 'src/interfaces/requests/addMedicalRecordRequest.interface';
-import { GetAllowedPatientsRequest } from 'src/interfaces/requests/getAllowedPatientsRequest.interface';
+import { GetAllowedPatientsRequest } from 'src/Models/getAllowedPatientsRequest';
 
-import { MedicalRecord } from 'src/types';
+import { MedicalRecord, Patient } from 'src/types';
+import { PatientsService } from 'src/Services/patients.service';
 
 @Injectable()
 export class MedicalFacade {
-  constructor(private readonly medicalService: MedicalService) {}
+  constructor(
+    private readonly medicalService: MedicalService,
+    private readonly patientsService: PatientsService,
+  ) {}
 
-  public getAllowedPatients(
+  public async getAllowedPatients(
     getAllowedPatientsRequest: GetAllowedPatientsRequest,
-  ): string {
-    return 'pacientes';
+  ): Promise<Patient[]> {
+    const patientWallets = await this.medicalService.getPatients(
+      getAllowedPatientsRequest,
+    );
+
+    const parsedPatients = await Promise.all(
+      patientWallets.map(
+        async (patientWallet) =>
+          await this.convertPatientWallets(
+            patientWallet,
+            getAllowedPatientsRequest.doctorWallet,
+          ),
+      ),
+    );
+
+    return parsedPatients;
   }
 
   public async getMedicalRecords(
     web3BaseRequest: Web3BaseRequest,
   ): Promise<MedicalRecord[]> {
     const records = await this.medicalService.getRecords(web3BaseRequest);
-    const parsedRecords = records.map(
-      this.convertMedicalRecords
-    );
+    const parsedRecords = records.map(this.convertMedicalRecords);
 
     return parsedRecords;
   }
@@ -36,7 +52,22 @@ export class MedicalFacade {
   }
 
   private convertMedicalRecords(stringfiedRecord: string): MedicalRecord {
-      return JSON.parse(stringfiedRecord) as MedicalRecord
+    return JSON.parse(stringfiedRecord) as MedicalRecord;
+  }
+
+  private async convertPatientWallets(
+    patientWallet: string,
+    doctorWallet: string,
+  ): Promise<Patient> {
+    const web3Resquest = new Web3BaseRequest();
+    web3Resquest.doctorWallet = doctorWallet;
+    web3Resquest.patientsWallet = patientWallet;
+
+    return {
+      Nome:
+        (await this.patientsService.getPatientsName(web3Resquest)) ??
+        'Sem Nome',
+      Carteira: doctorWallet,
+    };
   }
 }
-

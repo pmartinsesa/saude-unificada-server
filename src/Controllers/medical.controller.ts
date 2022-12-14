@@ -1,11 +1,13 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
-import { Web3BaseRequest } from 'src/Models/web3BaseRequest';
-
 import { MedicalFacade } from 'src/Facades/medical.facade';
+
+import { Web3BaseRequest } from 'src/Models/web3BaseRequest';
+import { GetAllowedPatientsRequest } from 'src/Models/getAllowedPatientsRequest';
 import { AddMedicalRecordRequest } from 'src/interfaces/requests/addMedicalRecordRequest.interface';
-import { GetAllowedPatientsRequest } from 'src/interfaces/requests/getAllowedPatientsRequest.interface';
+
+import { MedicalRecord, Patient } from 'src/types';
 
 @ApiTags('Medical Controller')
 @Controller('medical')
@@ -13,17 +15,18 @@ export class MedicalController {
   constructor(private readonly medicalFacade: MedicalFacade) {}
 
   @Post('get-allowed-patients')
+  @HttpCode(200)
   getAllowedPatientsByDoctor(
     @Body() getAllowedPatientsRequest: GetAllowedPatientsRequest,
-  ): string {
-    // tem que usar o get patient name
+  ): Promise<Patient[]> {
     return this.medicalFacade.getAllowedPatients(getAllowedPatientsRequest);
   }
 
   @Post('get-medical-records-by-clients')
+  @HttpCode(200)
   getMedicalRecordsByPatients(
     @Body() web3BaseRequest: Web3BaseRequest,
-  ): Promise<any> {
+  ): Promise<MedicalRecord[]> {
     return this.medicalFacade.getMedicalRecords(web3BaseRequest);
   }
 

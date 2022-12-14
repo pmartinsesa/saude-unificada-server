@@ -3,6 +3,11 @@ export type Doctor = {
   CRM: string;
 }
 
+export type Patient = {
+  Nome: string;
+  Carteira: string;
+}
+
 export type Analysis = {
   Diagnostico: string;
   Prognostico: string;
@@ -11,7 +16,7 @@ export type Analysis = {
 
 export type MedicalRecord = {
   Nome: string;
-  Hospitals: string;
+  Hospital: string;
   Medico: Doctor;
   Analise: Analysis
 }
