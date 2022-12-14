@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { RegisterPatientRequest } from 'src/interfaces/requests/registerPatientRequest.interface';
-import { Web3BaseRequest } from 'src/interfaces/requests/web3BaseRequest.interface';
+import { Web3BaseRequest } from 'src/interfaces/requests/web3BaseRequest';
 
 import { PatientsFacade } from 'src/Facades/patients.facade';
 

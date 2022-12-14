@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
-import { Web3BaseRequest } from 'src/interfaces/requests/web3BaseRequest.interface';
+import { Web3BaseRequest } from 'src/interfaces/requests/web3BaseRequest';
 
 import { MedicalFacade } from 'src/Facades/medical.facade';
 import { AddMedicalRecordRequest } from 'src/interfaces/requests/addMedicalRecordRequest.interface';
@@ -23,7 +23,7 @@ export class MedicalController {
   @Post('get-medical-records-by-clients')
   getMedicalRecordsByPatients(
     @Body() web3BaseRequest: Web3BaseRequest,
-  ): string {
+  ): Promise<any> {
     return this.medicalFacade.getMedicalRecords(web3BaseRequest);
   }
 

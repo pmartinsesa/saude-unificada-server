@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { Web3BaseRequest } from 'src/interfaces/requests/web3BaseRequest.interface';
+import { Web3BaseRequest } from 'src/interfaces/requests/web3BaseRequest';
 import { AddMedicalRecordRequest } from 'src/interfaces/requests/addMedicalRecordRequest.interface';
 import { GetAllowedPatientsRequest } from 'src/interfaces/requests/getAllowedPatientsRequest.interface';
 
@@ -26,7 +26,7 @@ export class MedicalService {
     web3BaseRequest: Web3BaseRequest,
   ): Promise<Array<any>> {
     const contract = this.web3Service.getSmartContractInstance();
-
+    
     const medicalRecords = (await contract.methods
       .getMedicalRecord(
         web3BaseRequest.patientsWallet,
