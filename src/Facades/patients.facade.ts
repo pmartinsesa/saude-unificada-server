@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { Web3BaseRequest } from 'src/interfaces/requests/web3BaseRequest';
+import { Web3BaseRequest } from 'src/Models/web3BaseRequest';
 import { RegisterPatientRequest } from 'src/interfaces/requests/registerPatientRequest.interface';
 
 @Injectable()

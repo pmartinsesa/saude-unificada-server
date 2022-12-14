@@ -1,4 +1,4 @@
-import { Web3BaseRequest } from "./web3BaseRequest";
+import { Web3BaseRequest } from "../../Models/web3BaseRequest";
 
 export interface AddMedicalRecordRequest extends Web3BaseRequest {
   patientsWallet: string,
