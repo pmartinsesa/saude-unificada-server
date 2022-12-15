@@ -5,7 +5,7 @@
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
+  <p align="center">Trabalho de Conclusão de curso - Backend Sistema de Saúde Unificado</p>
     <p align="center">
 <a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
 <a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
@@ -24,7 +24,11 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Este repositorio está armazendo o backend que faz a integração com o WEB3 (servidor da blockchain) com o frontend (Página do hospital).
+
+## Ganache
+
+Recomendamos que execute o projeto localmente usando [Ganache/Truffle](https://trufflesuite.com/). Crie um servidor blockchain local e na raiz do projeto um arquivo '.developement.env', crie as variáveis de ambientes localizadas no arquivo config/configuration.ts, e se divirta 😀. 
 
 ## Installation
 
@@ -57,17 +61,9 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
 ## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
+- Authors - Pedro Martins e Sá, Pedro Henrique Souza Flores
 ## License
 
 Nest is [MIT licensed](LICENSE).
