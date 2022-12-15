@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RegisterPatientRequest } from 'src/interfaces/requests/registerPatientRequest.interface';
+import { RegisterPatientRequest } from 'src/Models/registerPatientRequest';
 
 import { Web3BaseRequest } from 'src/Models/web3BaseRequest';
 
@@ -30,8 +30,8 @@ export class PatientsService {
     const contract = this.web3Service.getSmartContractInstance();
 
     const response = await contract.methods
-      .setPacientName(registerPatientRequest.wallet, registerPatientRequest.name)
-      .send({ from: registerPatientRequest.wallet });
+      .setPacientName(registerPatientRequest.patientWallet, registerPatientRequest.name)
+      .send({ from: registerPatientRequest.patientWallet });
 
     return response;
   }
