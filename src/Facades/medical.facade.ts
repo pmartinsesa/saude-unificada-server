@@ -69,7 +69,7 @@ export class MedicalFacade {
       Nome:
         await this.patientsService.getPatientsName(web3Resquest) ||
         'Sem Nome',
-      Carteira: doctorWallet,
+      Carteira: patientWallet,
     };
   }
 }
