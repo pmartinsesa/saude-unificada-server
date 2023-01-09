@@ -6,6 +6,10 @@ import { GetAllowedPatientsRequest } from 'src/Models/getAllowedPatientsRequest'
 
 import { Web3Service } from './web3.service';
 
+import { File } from 'web3.storage';
+import { uuid } from 'uuidv4';
+import { BlockchainInstance } from 'src/types';
+
 @Injectable()
 export class MedicalService {
   constructor(private readonly web3Service: Web3Service) {}
@@ -26,30 +30,61 @@ export class MedicalService {
     web3BaseRequest: Web3BaseRequest,
   ): Promise<Array<string>> {
     const contract = this.web3Service.getSmartContractInstance();
-    
+
     const medicalRecords = (await contract.methods
       .getMedicalRecord(
         web3BaseRequest.patientsWallet,
         web3BaseRequest.doctorWallet,
       )
       .call()) as Array<string>;
- 
-      return medicalRecords;
+
+
+    console.log(medicalRecords)
+
+    return medicalRecords;
   }
 
   public async addRecord(
     addRecordRequest: AddMedicalRecordRequest,
   ): Promise<any> {
-    const contract = this.web3Service.getSmartContractInstance();
 
+    const blockchainRecord = await this.postOnIPFS(addRecordRequest);
+
+
+    console.log(JSON.stringify(blockchainRecord));
+
+    const contract = this.web3Service.getSmartContractInstance();
     const response = await contract.methods
       .addMedicalRecord(
         addRecordRequest.patientsWallet,
         addRecordRequest.doctorWallet,
-        JSON.stringify(addRecordRequest.record),
+        JSON.stringify(blockchainRecord),
       )
-      .send({ from: addRecordRequest.doctorWallet, gas: 100000000 } );
+      .send({ from: addRecordRequest.doctorWallet, gas: 300000 });
 
     return response;
+  }
+
+  private async postOnIPFS(
+    addRecordRequest: AddMedicalRecordRequest,
+  ): Promise<BlockchainInstance> {
+    const client = this.web3Service.createWeb3StorageContract();
+
+    const clientRecord = JSON.stringify(addRecordRequest.record);
+    const fileName = `${addRecordRequest.patientsWallet}-${uuid()}.json`;
+
+    const file = [
+      new File([clientRecord], fileName, { type: 'application/json' }),
+    ];
+    const cid = await client.put(file);
+
+
+    console.log('cid dentro: ', cid);	
+    console.log('fileName dentro: ', fileName);	
+
+    return {
+      cid,
+      fileName,
+    };
   }
 }

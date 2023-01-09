@@ -24,7 +24,7 @@ export class MedicalController {
 
   @Post('get-medical-records-by-clients')
   @HttpCode(200)
-  getMedicalRecordsByPatients(
+  async getMedicalRecordsByPatients(
     @Body() web3BaseRequest: Web3BaseRequest,
   ): Promise<MedicalRecord[]> {
     return this.medicalFacade.getMedicalRecords(web3BaseRequest);

@@ -20,3 +20,8 @@ export type Analysis = {
   prognostic: string;
   files: string[];
 }
+
+export type BlockchainInstance = {
+  cid: string;
+  fileName: string;
+}
