@@ -1,6 +1,13 @@
+export type MedicalRecord = {
+  patientName: string;
+  hospital: string;
+  doctor: Doctor;
+  analysis: Analysis
+}
+
 export type Doctor = {
-  Nome: string;
-  CRM: string;
+  name: string;
+  register: string;
 }
 
 export type Patient = {
@@ -9,14 +16,7 @@ export type Patient = {
 }
 
 export type Analysis = {
-  Diagnostico: string;
-  Prognostico: string;
-  Imagens: string[];
-}
-
-export type MedicalRecord = {
-  Nome: string;
-  Hospital: string;
-  Medico: Doctor;
-  Analise: Analysis
+  diagnostic: string;
+  prognostic: string;
+  files: string[];
 }

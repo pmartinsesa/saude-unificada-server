@@ -48,7 +48,7 @@ export class MedicalService {
         addRecordRequest.doctorWallet,
         JSON.stringify(addRecordRequest.record),
       )
-      .send({ from: addRecordRequest.patientsWallet, gas: 3000000 } );
+      .send({ from: addRecordRequest.doctorWallet, gas: 100000000 } );
 
     return response;
   }
