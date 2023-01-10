@@ -6,8 +6,9 @@ import { Web3BaseRequest } from 'src/Models/web3BaseRequest';
 import { AddMedicalRecordRequest } from 'src/Models/addMedicalRecordRequest';
 import { GetAllowedPatientsRequest } from 'src/Models/getAllowedPatientsRequest';
 
-import { MedicalRecord, Patient } from 'src/types';
+import { BlockchainInstance, MedicalRecord, Patient } from 'src/types';
 import { PatientsService } from 'src/Services/patients.service';
+import axios from 'axios';
 
 @Injectable()
 export class MedicalFacade {
@@ -39,13 +40,17 @@ export class MedicalFacade {
   public async getMedicalRecords(
     web3BaseRequest: Web3BaseRequest,
   ): Promise<MedicalRecord[]> {
-    const records = await this.medicalService.getRecords(web3BaseRequest);
-
-    console.log(records);
-    const parsedRecords = records.map(this.convertMedicalRecords);
+    const blockchainInstance = await this.medicalService.getRecords(web3BaseRequest);
+    const parsedRecords = await Promise.all(
+      blockchainInstance.map(
+        async (stringfiedBlockInstance: string) =>
+          await this.convertMedicalRecords(stringfiedBlockInstance),
+      ),
+    );
 
     return parsedRecords;
   }
+
 
   public async addMedicalRecords(
     addMedicalRecordRequest: AddMedicalRecordRequest,
@@ -53,8 +58,18 @@ export class MedicalFacade {
     return await this.medicalService.addRecord(addMedicalRecordRequest);
   }
 
-  private convertMedicalRecords(stringfiedRecord: string): MedicalRecord {
-    return JSON.parse(stringfiedRecord) as MedicalRecord;
+  private async convertMedicalRecords(
+    stringfiedBlockInstance: string,
+  ): Promise<MedicalRecord> {
+    const blockInstance = JSON.parse(
+      stringfiedBlockInstance,
+    ) as BlockchainInstance;
+    
+    const response = await axios.get(
+      `https://${blockInstance.cid}.ipfs.w3s.link/${blockInstance.fileName}`,
+    );
+
+    return response.data as MedicalRecord;
   }
 
   private async convertPatientWallets(

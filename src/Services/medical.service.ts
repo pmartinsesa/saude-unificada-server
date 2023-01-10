@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
+import { BlockchainInstance } from 'src/types';
 import { Web3BaseRequest } from 'src/Models/web3BaseRequest';
 import { AddMedicalRecordRequest } from 'src/Models/addMedicalRecordRequest';
 import { GetAllowedPatientsRequest } from 'src/Models/getAllowedPatientsRequest';
@@ -8,7 +9,6 @@ import { Web3Service } from './web3.service';
 
 import { File } from 'web3.storage';
 import { uuid } from 'uuidv4';
-import { BlockchainInstance } from 'src/types';
 
 @Injectable()
 export class MedicalService {
@@ -38,20 +38,13 @@ export class MedicalService {
       )
       .call()) as Array<string>;
 
-
-    console.log(medicalRecords)
-
     return medicalRecords;
   }
 
   public async addRecord(
     addRecordRequest: AddMedicalRecordRequest,
   ): Promise<any> {
-
     const blockchainRecord = await this.postOnIPFS(addRecordRequest);
-
-
-    console.log(JSON.stringify(blockchainRecord));
 
     const contract = this.web3Service.getSmartContractInstance();
     const response = await contract.methods
@@ -77,10 +70,6 @@ export class MedicalService {
       new File([clientRecord], fileName, { type: 'application/json' }),
     ];
     const cid = await client.put(file);
-
-
-    console.log('cid dentro: ', cid);	
-    console.log('fileName dentro: ', fileName);	
 
     return {
       cid,
